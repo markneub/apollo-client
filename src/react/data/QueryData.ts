@@ -243,12 +243,15 @@ export class QueryData<TData, TVariables> extends OperationData<
       return;
     }
 
-    if (this.getOptions().skip) return;
-
     const newObservableQueryOptions = {
       ...this.prepareObservableQueryOptions(),
       children: null
     };
+
+    if (this.getOptions().skip) {
+      this.previous.observableQueryOptions = newObservableQueryOptions;
+      return;
+    }
 
     if (
       !equal(

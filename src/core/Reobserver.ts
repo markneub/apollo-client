@@ -80,7 +80,6 @@ export class Reobserver<TData, TVars> {
 
     if (this.pollingInfo) {
       clearTimeout(this.pollingInfo.timeout);
-      this.options.pollInterval = 0;
       this.updatePolling();
     }
   }

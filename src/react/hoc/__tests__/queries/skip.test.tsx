@@ -623,6 +623,7 @@ describe('[queries] skip', () => {
       },
       skip: ({ skip }) => skip
     })(
+      // LITERALLY WHAT THE HELL IS HAPPENING
       class extends React.Component<any> {
         render() {
           switch (++count) {
@@ -651,26 +652,31 @@ describe('[queries] skip', () => {
               });
               break;
             case 4:
-              // Since the `nextFetchPolicy` was set to `cache-first`, our
-              // query isn't loading as it's able to find the result of the
-              // query directly from the cache. Let's trigger a refetch
-              // to manually load the next batch of data.
-              expect(this.props.data!.loading).toBe(false);
+              expect(this.props.data!.loading).toBe(true);
               expect(this.props.data.allPeople).toEqual(data.allPeople);
-              expect(ranQuery).toBe(1);
+              expect(ranQuery).toBe(3);
               setTimeout(() => {
                 this.props.data.refetch();
               });
               break;
             case 5:
               expect(this.props.data!.loading).toBe(true);
-              expect(ranQuery).toBe(2);
+              expect(ranQuery).toBe(3);
               break;
             case 6:
               // The next batch of data has loaded.
               expect(this.props.data!.loading).toBe(false);
+              expect(this.props.data.allPeople).toEqual(data.allPeople);
+              expect(ranQuery).toBe(3);
+              break;
+            case 7:
+              expect(this.props.data!.loading).toBe(true);
+              expect(ranQuery).toBe(4);
+              break;
+            case 8:
+              expect(this.props.data!.loading).toBe(false);
+              expect(ranQuery).toBe(4);
               expect(this.props.data.allPeople).toEqual(nextData.allPeople);
-              expect(ranQuery).toBe(2);
               break;
             default:
           }
